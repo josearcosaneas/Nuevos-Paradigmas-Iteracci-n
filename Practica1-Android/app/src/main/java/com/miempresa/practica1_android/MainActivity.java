@@ -18,9 +18,11 @@ import android.content.pm.ActivityInfo;
 import java.util.List;
 
 
-
 /**
  * Clase principal de la aplicacion.
+ * @author José Arcos Aneas
+ * @version 0.2
+ * @see <a href="https://github.com/josearcosaneas/Nuevos-Paradigmas-Iteracci-n/tree/master/Practica1-Android"
  */
 public class MainActivity extends Activity implements SensorEventListener {
     MediaPlayer mp;
@@ -64,6 +66,7 @@ public class MainActivity extends Activity implements SensorEventListener {
      * Funcion onResume funcion que reinicia el servicio si no ha sido
      * matado (killed) el proceso, o sea cuando es pausado y se mantiene
      * activo en segundo plano.
+     * Aqui registramos el servicio.
      */
     @Override
     protected void onResume() {
@@ -76,7 +79,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     /**
-     * Funcion que detiene el servicio (activity).
+     * Funcion que detiene el servicio (activity). Indicamos
+     * que no queremos recibir mas.
      */
     @Override
     protected void onStop() {
@@ -102,7 +106,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         synchronized (this) {
-
             // el vector values indica los valores en x,y,z dependiendo
             // de la posicion estos valores se miden en m/s^2 e indican la
             // fuerza aplicada al terminal en cada eje.
@@ -111,19 +114,23 @@ public class MainActivity extends Activity implements SensorEventListener {
             curZ = event.values[2];
             // determinamos la posicion que activara los diferentes eventos
             // iniciar, continuar, destruir o pasar una cancion.
-            if(curX > 0 && curX < 1 && curY < 11 && curY > 9 && curZ > 0 && curZ < 1){
+            if(curX > 0f && curX < 1f && curY < 11f && curY > 9f && curZ > 0f && curZ < 1f){
                 if (posicion == 0 )
                     iniciar();
                 else continuar();
             }
 
-            if (curX > -1 && curX < 1 && curY > -1 && curY < 1 && curZ > -11 && curZ < -9){
+            if (curX > -1f && curX < 1f && curY > -1f && curY < 1f && curZ > -11f && curZ < -9f){
                 destruir();
             }
 
-            if (curX >= 2 && curX <=3){
+            if (curX >= 2f && curX <=3f && curY > 5 && curZ > 6){
 
                 pasarCancion();
+            }
+            if(curX > -1f && curX < 1f && curY < -1f && curY > 0f && curZ > 10f && curZ < 10.5f){
+
+                pausar();
             }
             // Informaremos por pantalla de los valores que toma el acelerometro
             ((TextView) findViewById(R.id.txtAccX)).setText("X: " + curX);
